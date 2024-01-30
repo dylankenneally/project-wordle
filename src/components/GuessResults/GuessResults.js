@@ -1,11 +1,21 @@
 import React from 'react';
 
+import Guess from '../Guess';
+import { NUM_OF_GUESSES_ALLOWED } from '../../constants';
+
 function GuessResults({ guesses }) {
+  let gs = [...guesses];
+  for (let i = gs.length; i < NUM_OF_GUESSES_ALLOWED; ++i) {
+    gs.push('     ');
+  }
+
+  if (gs.length > NUM_OF_GUESSES_ALLOWED) {
+    gs = gs.slice(0, NUM_OF_GUESSES_ALLOWED);
+  }
+
   return (
     <div className="guess-results">
-      {guesses.map((guess, index) => (
-        <p className="guess" key={`guess${index}`} >{guess}</p>
-      ))}
+      {gs.map((g, i) => <Guess guess={g} key={`guess_${i}`} />)}
     </div>
   );
 }
