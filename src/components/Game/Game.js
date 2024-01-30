@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import { sample } from '../../utils';
-import { WORDS } from '../../data';
+import { sample } from "../../utils";
+import { WORDS } from "../../data";
 
-import GuessInput from '../GuessInput';
-import GuessResults from '../GuessResults';
+import GuessInput from "../GuessInput";
+import GuessResults from "../GuessResults";
+import Banner from "../Banner";
+import { NUM_OF_GUESSES_ALLOWED } from "../../constants";
 
 // Pick a random word on every pageload.
 const answer = sample(WORDS);
@@ -13,12 +15,20 @@ console.info({ answer });
 
 function Game() {
   const [guesses, setGuesses] = useState([]);
+  let won = guesses.includes(answer);
+  let gameOver = guesses.length === NUM_OF_GUESSES_ALLOWED || won;
   return (
     <>
+      {gameOver && (
+        <Banner answer={answer} win={won} guesses={guesses.length} />
+      )}
       <GuessResults answer={answer} guesses={guesses} />
-      <GuessInput onNewGuess={(guess) => {
-        setGuesses([...guesses, guess]);
-      }} />
+      <GuessInput
+        onNewGuess={(guess) => {
+          setGuesses([...guesses, guess]);
+        }}
+        disabled={gameOver}
+      />
     </>
   );
 }
